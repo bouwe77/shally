@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{2A2B81DF-5536-4A40-8F76-141C2973B05B}"
 	ProjectSection(SolutionItems) = preProject
+		docs\HOWTO nuget.txt = docs\HOWTO nuget.txt
 		docs\readme.md = docs\readme.md
 	EndProjectSection
 EndProject

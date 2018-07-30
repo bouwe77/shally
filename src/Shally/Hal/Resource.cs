@@ -7,109 +7,114 @@ using Shally.Json;
 
 namespace Shally.Hal
 {
-   /// <summary>
-   /// Represents a HAL Resource.
-   /// </summary>
-   public class Resource
-   {
-      private const string Self = "self";
-      private const string Links = "_links";
-      private const string Embedded = "_embedded";
+    /// <summary>
+    /// Represents a HAL Resource.
+    /// </summary>
+    public class Resource
+    {
+        private const string Self = "self";
+        private const string Links = "_links";
+        private const string Embedded = "_embedded";
 
-      private JsonSerializer JsonSerializer = new JsonSerializer()
-      {
-         ContractResolver = new LowercaseContractResolver(),
-         NullValueHandling = NullValueHandling.Ignore,
-         Formatting = Formatting.Indented,
-      };
+        private JsonSerializer JsonSerializer = new JsonSerializer()
+        {
+            ContractResolver = new LowercaseContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.Indented,
+        };
 
-      public JObject Json { get; protected set; }
+        public JObject Json { get; protected set; }
 
-      public Resource(Link selfLink)
-      {
-         Enforce.ArgumentNotNull(selfLink, "Resource.SelfLink is required");
-         Json = new JObject();
-         AddLinkInternal(Self, selfLink);
-      }
+        public Resource(Link selfLink)
+        {
+            Enforce.ArgumentNotNull(selfLink, "Resource.SelfLink is required");
+            Json = new JObject();
+            AddLinkInternal(Self, selfLink);
+        }
 
-      public void AddLink(string propertyName, Link link)
-      {
-         AddLinkInternal(propertyName, link);
-      }
+        public Resource()
+            : this(new Link(string.Empty))
+        {
+        }
 
-      public void AddLink(string propertyName, IEnumerable<Link> links)
-      {
-         AddLinkInternal(propertyName, links);
-      }
+        public void AddLink(string propertyName, Link link)
+        {
+            AddLinkInternal(propertyName, link);
+        }
 
-      private void AddLinkInternal(string propertyName, object links)
-      {
-         Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
+        public void AddLink(string propertyName, IEnumerable<Link> links)
+        {
+            AddLinkInternal(propertyName, links);
+        }
 
-         AddObjectIfNecessary(Links);
+        private void AddLinkInternal(string propertyName, object links)
+        {
+            Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
 
-         JToken jsonLinks = null;
-         if (links != null)
-         {
-            jsonLinks = JToken.FromObject(links, JsonSerializer);
-         }
+            AddObjectIfNecessary(Links);
 
-         Json[Links][propertyName] = jsonLinks;
-      }
+            JToken jsonLinks = null;
+            if (links != null)
+            {
+                jsonLinks = JToken.FromObject(links, JsonSerializer);
+            }
 
-      public void AddProperty(string propertyName, object value)
-      {
-         Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
+            Json[Links][propertyName] = jsonLinks;
+        }
 
-         JToken jsonValue = null;
-         if (value != null)
-         {
-            jsonValue = JToken.FromObject(value, JsonSerializer);
-         }
+        public void AddProperty(string propertyName, object value)
+        {
+            Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
 
-         Json[propertyName] = jsonValue;
-      }
+            JToken jsonValue = null;
+            if (value != null)
+            {
+                jsonValue = JToken.FromObject(value, JsonSerializer);
+            }
 
-      public void AddResource(string propertyName, Resource resource)
-      {
-         Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
+            Json[propertyName] = jsonValue;
+        }
 
-         AddObjectIfNecessary(Embedded);
+        public void AddResource(string propertyName, Resource resource)
+        {
+            Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
 
-         JObject jsonObject = null;
-         if (resource != null)
-         {
-            jsonObject = JObject.FromObject(resource.Json, JsonSerializer);
-         }
+            AddObjectIfNecessary(Embedded);
 
-         Json[Embedded][propertyName] = jsonObject;
-      }
+            JObject jsonObject = null;
+            if (resource != null)
+            {
+                jsonObject = JObject.FromObject(resource.Json, JsonSerializer);
+            }
 
-      public void AddResource(string propertyName, IEnumerable<Resource> resources)
-      {
-         Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
+            Json[Embedded][propertyName] = jsonObject;
+        }
 
-         AddObjectIfNecessary(Embedded);
+        public void AddResource(string propertyName, IEnumerable<Resource> resources)
+        {
+            Enforce.ArgumentNotNull(propertyName, "PropertyName can not be null");
 
-         JArray jsonObjects = null;
-         if (resources != null)
-         {
-            var resourcesAsJson = resources.Select(resource => resource.Json).ToList();
-            jsonObjects = JArray.FromObject(resourcesAsJson, JsonSerializer);
-         }
+            AddObjectIfNecessary(Embedded);
 
-         Json[Embedded][propertyName] = jsonObjects;
-      }
+            JArray jsonObjects = null;
+            if (resources != null)
+            {
+                var resourcesAsJson = resources.Select(resource => resource.Json).ToList();
+                jsonObjects = JArray.FromObject(resourcesAsJson, JsonSerializer);
+            }
 
-      private void AddObjectIfNecessary(string name)
-      {
-         Enforce.ArgumentNotNull(name, "Name can not be null");
+            Json[Embedded][propertyName] = jsonObjects;
+        }
 
-         JToken links = Json[name];
-         if (links == null)
-         {
-            Json.Add(name, new JObject());
-         }
-      }
-   }
+        private void AddObjectIfNecessary(string name)
+        {
+            Enforce.ArgumentNotNull(name, "Name can not be null");
+
+            JToken links = Json[name];
+            if (links == null)
+            {
+                Json.Add(name, new JObject());
+            }
+        }
+    }
 }

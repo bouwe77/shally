@@ -1,0 +1,15 @@
+
+1) Doe een Release build
+
+2) Versienummer aanpassen in project properties >> Package
+
+3) Rechtermuisknop op project en kies "Pack"
+
+4) Vervang versienummer X.Y.Z in dit commando:
+      "c:\program files\nuget\nuget.exe" push Shally.X.Y.Z.nupkg oy2hrapbgjfcnoudcgiat72fy5kmy25e3ed23y5qa64gl4 -Source https://api.nuget.org/v3/index.json
+
+5) Navigeer naar bin Release folder:
+      d:
+      cd "Mijn Projecten\-- Mijn ReUsables\shally\Shally\src\shally\bin\Release"
+
+6) Voer commando uit
