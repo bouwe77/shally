@@ -84,6 +84,3 @@ The code above results in the following HAL document:
   }
 }
 ```
-
-
-
