@@ -17,5 +17,6 @@ namespace Shally.Forms
       public string Action { get; set; }
       public string ContentType { get; set; }
       public IEnumerable<Field> Fields { get; private set; }
+      public bool IsEnabled { get; set; }
    }
 }

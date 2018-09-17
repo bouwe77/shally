@@ -13,3 +13,5 @@
       cd "Mijn Projecten\-- Mijn ReUsables\shally\Shally\src\shally\bin\Release"
 
 6) Voer commando uit
+
+7) Push naar github

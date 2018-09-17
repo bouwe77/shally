@@ -4,42 +4,47 @@ using Shally.Hal;
 
 namespace Shally.Forms
 {
-   public static class ResourceExtensions
-   {
-      public static void AddForm(this Resource resource, Form form)
-      {
-         var jsonForm = new JObject();
-         jsonForm["title"] = form.Title;
-         jsonForm["method"] = form.Method;
-         jsonForm["action"] = form.Action;
-         jsonForm["contentType"] = form.ContentType;
-
-         if (form.Fields.Any())
-         {
-            jsonForm["fields"] = new JObject();
-
-            foreach (var field in form.Fields)
+    public static class ResourceExtensions
+    {
+        public static void AddForm(this Resource resource, Form form)
+        {
+            var jsonForm = new JObject
             {
-               var jsonField = new JObject();
-               jsonField["name"] = field.Name;
-               jsonField["type"] = field.Type;
-               jsonField["label"] = field.Label;
-               jsonField["hint"] = field.Hint;
-               jsonField["readonly"] = field.ReadOnly;
-               jsonField["defaultValue"] = field.DefaultValue;
-               jsonField["regex"] = field.Regex;
-               jsonField["required"] = field.Required;
+                ["title"] = form.Title,
+                ["method"] = form.Method,
+                ["action"] = form.Action,
+                ["contentType"] = form.ContentType,
+                ["enabled"] = form.IsEnabled
+            };
 
-               jsonForm["fields"][field.Name] = jsonField;
+            if (form.Fields.Any())
+            {
+                jsonForm["fields"] = new JObject();
+
+                foreach (var field in form.Fields)
+                {
+                    var jsonField = new JObject
+                    {
+                        ["name"] = field.Name,
+                        ["type"] = field.Type,
+                        ["label"] = field.Label,
+                        ["hint"] = field.Hint,
+                        ["readonly"] = field.ReadOnly,
+                        ["defaultValue"] = field.DefaultValue,
+                        ["regex"] = field.Regex,
+                        ["required"] = field.Required
+                    };
+
+                    jsonForm["fields"][field.Name] = jsonField;
+                }
             }
-         }
 
-         if (resource.Json["_forms"] == null)
-         {
-            resource.Json["_forms"] = new JObject();
-         }
+            if (resource.Json["_forms"] == null)
+            {
+                resource.Json["_forms"] = new JObject();
+            }
 
-         resource.Json["_forms"][form.Name] = jsonForm;
-      }
-   }
+            resource.Json["_forms"][form.Name] = jsonForm;
+        }
+    }
 }
